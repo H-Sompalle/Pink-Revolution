@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <style>
+        body {
+            background-image: url('/static/background.jpg'); /* Replace 'background.jpg' with your image file name */
+            background-size: cover; /* Cover the entire background */
+            background-position: center; /* Center the background image */
+            background-repeat: no-repeat; /* Do not repeat the background image */
+            min-height: 100vh; /* Set minimum height to fill the viewport */
+            margin: 0; /* Remove default margin */
+            padding: 0; /* Remove default padding */
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title text-center">Prediction Result</h1>
+                        <div class="card-text">
+                            {% if prediction %}
+                                <h2>Top Predictions:</h2>
+                                <ul class="list-group">
+                                    {% for tag in prediction['predictions'] %}
+                                        {% if tag['tagName'] == 'Malignant' %}
+                                            <li class="list-group-item" style="background-color: #FF5733">{{ tag['tagName'] }}: {{ '%.2f' % (tag['probability'] * 100) }}%</li>
+                                        {% elif tag['tagName'] == 'Benign' %}
+                                            <li class="list-group-item" style="background-color: #F9C74F">{{ tag['tagName'] }}: {{ '%.2f' % (tag['probability'] * 100) }}%</li>
+                                        {% else %}
+                                            <li class="list-group-item" style="background-color: #28A745">{{ tag['tagName'] }}: {{ '%.2f' % (tag['probability'] * 100) }}%</li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                                <p class="text-muted mt-3">
+                                    <strong>Malignant:</strong> Indicates the presence of <em>harmful and potentially life-threatening</em> conditions, such as cancerous cells or tumors.
+                                    <br>
+                                    <strong>Benign:</strong> Indicates the presence of <em>non-cancerous growths or abnormalities</em> that are not harmful.
+                                    <br>
+                                    <strong>Benign without callback:</strong> Provides <em>reassurance</em> that further follow-up is not immediately necessary for benign findings.
+                                    <br>
+                                    <br>
+                                    <strong>Based on the probabilities, it is <em>recommended</em> to consult with a medical professional for further evaluation and guidance, especially for higher probabilities of malignant diagnoses. Regular screenings and follow-ups may be advised based on the probability levels.</strong>
+                                </p>
+                            {% else %}
+                                <p>No prediction result available.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
